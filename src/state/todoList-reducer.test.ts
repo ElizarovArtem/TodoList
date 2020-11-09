@@ -1,4 +1,10 @@
-import {AddTodoListAC, RemoveTodoListAC, todoListReducer} from './todoList-reducer'
+import {
+    AddTodoListAC,
+    ChangeTodoListFilterAC,
+    ChangeTodoListTitleAC,
+    RemoveTodoListAC,
+    todoListReducer
+} from './todoList-reducer'
 import {v1} from 'uuid';
 import {FilterValuesType, TodoListType} from "../App";
 
@@ -45,11 +51,7 @@ test('correct todolist should change its name', () => {
         {id: todolistId2, title: "What to buy", filter: "all"}
     ]
 
-    const action = {
-        type: 'CHANGE-TODOLIST-TITLE',
-        id: todolistId2,
-        title: newTodolistTitle
-    } as const;
+    const action = ChangeTodoListTitleAC(todolistId2, newTodolistTitle)
 
     const endState = todoListReducer(startState, action);
 
@@ -68,11 +70,7 @@ test('correct filter of todolist should be changed', () => {
         {id: todolistId2, title: "What to buy", filter: "all"}
     ]
 
-    const action = {
-        type: 'CHANGE-TODOLIST-FILTER',
-        id: todolistId2,
-        filter: newFilter
-    } as const;
+    const action = ChangeTodoListFilterAC(todolistId2, newFilter);
 
     const endState = todoListReducer(startState, action);
 

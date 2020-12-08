@@ -14,18 +14,7 @@ export type changeTaskStatusType = {
     isDone: boolean
 }
 
-let initialState: TasksStateType = {
-    [todoListID1]: [
-        {id: v1(), title: 'HTML&CSS', isDone: true},
-        {id: v1(), title: 'JavaScript', isDone: true},
-        {id: v1(), title: 'React', isDone: false}
-    ],
-    [todoListID2]: [
-        {id: v1(), title: 'Milk', isDone: false},
-        {id: v1(), title: 'Meat', isDone: false},
-        {id: v1(), title: 'Fish', isDone: false}
-    ]
-}
+let initialState: TasksStateType = {}
 
 export type ActionType =
     | RemoveTaskType

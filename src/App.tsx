@@ -33,7 +33,7 @@ export type TasksStateType = {
 
 export type FilterValuesType = 'all' | 'active' | 'completed';
 
-function App() {
+const  App = React.memo ( () => {
 
     let todoLists = useSelector<RootStateType, Array<TodoListType>>(state => state.todoLists)
     let tasks = useSelector<RootStateType, TasksStateType>(state => state.tasks)
@@ -42,36 +42,36 @@ function App() {
 
     const addTask = useCallback( (taskTitle: string, todoListID: string) => {
         dispatch(addTaskAC(taskTitle,todoListID))
-    }, [dispatch]);
+    }, []);
 
     const changeTaskStatus = useCallback( (taskId: string, isDone: boolean, todoListID: string) => {
         dispatch(changeTaskStatusAC(taskId,isDone,todoListID))
-    }, [dispatch]);
+    }, []);
 
     const changeTaskTitle = useCallback( (taskId: string, title: string, todoListID: string) => {
         dispatch(changeTaskTitleAC(taskId,title,todoListID))
-    }, [dispatch]);
+    }, []);
 
     const removeTasks = useCallback( (taskId: string, todoListID: string) => {
         dispatch(removeTaskAC(taskId,todoListID))
-    }, [dispatch]);
+    }, []);
 
     const changeFilter = useCallback( (value: FilterValuesType, todoListID: string) => {
         dispatch(changeTodoListFilterAC(todoListID, value))
-    }, [dispatch]);
+    }, []);
 
     const removeTodoList = useCallback( (todoListID: string) => {
         dispatch(removeTodoListAC(todoListID))
-    }, [dispatch])
+    }, [])
 
     const addTodoList = useCallback( (title: string) => {
         let action = addTodoListAC(title)
         dispatch(action)
-    }, [dispatch])
+    }, [])
 
     const changeTodoListTitle = useCallback( (todoListID: string, title: string) => {
         dispatch(changeTodoListTitleAC(todoListID,title))
-    }, [dispatch])
+    }, [])
 
     return (
         <div className="App">
@@ -96,12 +96,10 @@ function App() {
                         todoLists.map(tl => {
                             let tasksForTodoList = tasks[tl.id];
 
-
                             return (
-                                <Grid item>
+                                <Grid item key={tl.id}>
                                     <Paper elevation={3} style={{padding: "10px 20px 20px 20px"}} >
                                         <TodoList
-                                            key={tl.id}
                                             id={tl.id}
                                             title={tl.title}
                                             tasks={tasksForTodoList}
@@ -123,7 +121,7 @@ function App() {
             </Container>
         </div>
     );
-}
+})
 
 
 export default App;

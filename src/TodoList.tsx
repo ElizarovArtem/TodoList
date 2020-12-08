@@ -23,7 +23,7 @@ type PropsType = {
 }
 
 export const TodoList = React.memo( (props: PropsType) => {
-
+    console.log("TODOLIST")
     const removeTodoList = useCallback( () => {
         props.removeTodoList(props.id)
     }, [props.removeTodoList, props.id])
@@ -36,9 +36,9 @@ export const TodoList = React.memo( (props: PropsType) => {
         props.changeTodoListTitle(props.id, title)
     }, [ props.changeTodoListTitle, props.id])
 
-    const setAllFilterType = () => {props.changeFilter('all', props.id)}
-    const setActiveFilterType = () => {props.changeFilter('active', props.id)}
-    const setCompletedFilterType = () => {props.changeFilter('completed', props.id)}
+    const setAllFilterType = useCallback(() => props.changeFilter('all', props.id), [props.changeFilter, props.id])
+    const setActiveFilterType =useCallback(() => props.changeFilter('active', props.id), [props.changeFilter, props.id])
+    const setCompletedFilterType =useCallback(() => props.changeFilter('completed', props.id), [props.changeFilter, props.id])
 
     let tasks = props.tasks
 
@@ -61,6 +61,7 @@ export const TodoList = React.memo( (props: PropsType) => {
             <ul style={{listStyleType: "none", padding: "0"}}>
                 {
                     tasks.map(task => <Task
+                        key={task.id}
                         task={task}
                         todoListId={props.id}
                         changeTaskTitle={props.changeTaskTitle}

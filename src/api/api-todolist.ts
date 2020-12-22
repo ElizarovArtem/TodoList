@@ -1,11 +1,11 @@
 import axios from 'axios'
 
 const axiosInstance = axios.create({
+    baseURL: "https://social-network.samuraijs.com/api/1.1/",
     headers: {
-        "API_KEY": "226ab278-2dfb-4ab9-ae80-f2d3924748f4"
+        'API-KEY': "99c9c733-db8a-44c7-9158-dadaf379aa0f"
     },
-    withCredentials: true,
-    baseURL: "https://social-network.samuraijs.com/api/1.1/"
+    withCredentials: true
 })
 
 
@@ -62,7 +62,7 @@ type GetTasksResponseType = {
     totalCount: number
     error: string
 }
-const todoListsAPI = {
+export const todoListsAPI = {
     getTodoLists() {
         return axiosInstance.get<Array<TodoListType>>(`todo-lists`);
     },

@@ -1,17 +1,17 @@
-import React, {useCallback} from 'react';
+import React, {useCallback, useEffect} from 'react';
 import './App.css';
 import {TodoList} from "./TodoList";
-
 import {AddItemForm} from "./AddItemForm";
 import {AppBar, Button, Container, Grid, IconButton, Paper, Toolbar, Typography} from "@material-ui/core";
 import {Menu} from "@material-ui/icons";
 import {
-    addTodoListAC,
-    changeTodoListFilterAC,
-    changeTodoListTitleAC, FilterValuesType,
-    removeTodoListAC, TodoListDomainType,
+    changeTodoListFilterAC,createTodoListsTC, deleteTodoListsTC, FilterValuesType,
+    setTodoListsTC, TodoListDomainType, updateTodoListsTC,
 } from "./state/todoList-reducer";
-import {addTaskAC, changeTaskStatusAC, changeTaskTitleAC, removeTaskAC, TasksStateType} from "./state/tasks-reducer";
+import {
+    addTasksTC, deleteTasksTC,
+    TasksStateType, updateTaskStatusTC, updateTaskTitleTC
+} from "./state/tasks-reducer";
 import {useDispatch, useSelector} from "react-redux";
 import {RootStateType} from "./state/store";
 import {TaskStatuses} from "./api/api-todolist";
@@ -25,20 +25,24 @@ const  App = React.memo ( () => {
 
     const dispatch = useDispatch()
 
+    useEffect(() => {
+        dispatch(setTodoListsTC())
+    }, [])
+
     const addTask = useCallback( (taskTitle: string, todoListID: string) => {
-        dispatch(addTaskAC(taskTitle,todoListID))
+        dispatch(addTasksTC(todoListID,taskTitle))
     }, []);
 
     const changeTaskStatus = useCallback( (taskId: string, status: TaskStatuses, todoListID: string) => {
-        dispatch(changeTaskStatusAC(taskId,status,todoListID))
+        dispatch(updateTaskStatusTC(todoListID,taskId,status))
     }, []);
 
     const changeTaskTitle = useCallback( (taskId: string, title: string, todoListID: string) => {
-        dispatch(changeTaskTitleAC(taskId,title,todoListID))
+        dispatch(updateTaskTitleTC(todoListID,taskId,title))
     }, []);
 
     const removeTasks = useCallback( (taskId: string, todoListID: string) => {
-        dispatch(removeTaskAC(taskId,todoListID))
+        dispatch(deleteTasksTC(todoListID,taskId))
     }, []);
 
     const changeFilter = useCallback( (value: FilterValuesType, todoListID: string) => {
@@ -46,16 +50,16 @@ const  App = React.memo ( () => {
     }, []);
 
     const removeTodoList = useCallback( (todoListID: string) => {
-        dispatch(removeTodoListAC(todoListID))
+        dispatch(deleteTodoListsTC(todoListID))
     }, [])
 
     const addTodoList = useCallback( (title: string) => {
-        let action = addTodoListAC(title)
+        let action = createTodoListsTC(title)
         dispatch(action)
     }, [])
 
     const changeTodoListTitle = useCallback( (todoListID: string, title: string) => {
-        dispatch(changeTodoListTitleAC(todoListID,title))
+        dispatch(updateTodoListsTC(todoListID,title))
     }, [])
 
     return (

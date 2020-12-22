@@ -1,11 +1,11 @@
 import React, {useCallback} from 'react';
-
-import {FilterValuesType, TaskType} from "./App";
 import {AddItemForm} from "./AddItemForm";
 import {EditableSpan} from "./EditableSpan";
 import {Button, IconButton} from "@material-ui/core";
 import {Delete} from "@material-ui/icons";
 import {Task} from "./Task";
+import {TaskStatuses, TaskType} from "./api/api-todolist";
+import {FilterValuesType} from "./state/todoList-reducer";
 
 
 type PropsType = {
@@ -15,7 +15,7 @@ type PropsType = {
     changeFilter: (value: FilterValuesType, todoListId: string) => void
     addTask: (taskTitle: string, todoListId: string) => void
     removeTask: (taskId: string, todoListId: string) => void
-    changeTaskStatus: (taskId: string, isDone: boolean, todoListId: string) => void
+    changeTaskStatus: (taskId: string, status: TaskStatuses, todoListId: string) => void
     changeTaskTitle: (taskId: string, title:string, todoListId: string) => void
     filter: FilterValuesType
     removeTodoList: (todoListID: string) => void
@@ -43,10 +43,10 @@ export const TodoList = React.memo( (props: PropsType) => {
     let tasks = props.tasks
 
     if (props.filter === 'active') {
-        tasks = tasks.filter(t => t.isDone === false)
+        tasks = tasks.filter(t => t.status === TaskStatuses.New)
     }
     if (props.filter === 'completed') {
-        tasks = tasks.filter(t => t.isDone === true)
+        tasks = tasks.filter(t => t.status === TaskStatuses.Completed)
     }
 
     return (
@@ -81,13 +81,11 @@ export const TodoList = React.memo( (props: PropsType) => {
                     size={"small"}
                     variant={props.filter === "active" ? "contained" : "outlined"}
                     color={"primary"}
-                    //className={props.filter === "active" ? "active" : ""}
                     onClick={setActiveFilterType}>Active</Button>
                 <Button
                     size={"small"}
                     variant={props.filter === "completed" ? "contained" : "outlined" }
                     color={"primary"}
-                    // className={props.filter === "completed" ? "active" : ""}
                     onClick={setCompletedFilterType}>Completed</Button>
             </div>
         </div>);

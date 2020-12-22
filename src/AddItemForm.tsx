@@ -24,18 +24,7 @@ export const AddItemForm = React.memo( ( props: AddItemFormPropsType) => {
         }
     };
 
-    // const onAddItemClick = useCallback( () => {
-    //     debugger
-    //     if(title.trim() !== ""){
-    //         props.addItem(title.trim())
-    //         setTitle("")
-    //     }else{
-    //         setError("Title is required!");
-    //     }
-    // }, [props.addItem]);
-
     const onAddItemClick = () => {
-
         if(title.trim() !== ""){
             props.addItem(title.trim())
             setTitle("")

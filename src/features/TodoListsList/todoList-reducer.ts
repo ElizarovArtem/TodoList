@@ -8,6 +8,8 @@ import {
     setAppStatusAC,
     SetAppStatusType
 } from "../../app/appReducer";
+import {handleServerAppError, handleServerNetworkError} from "../../utils/error-utils";
+import {setTaskEntityStatusAC} from "./tasks-reducer";
 
 
 let initialState: Array<TodoListDomainType> = []
@@ -77,13 +79,11 @@ export const createTodoListsTC = (title: string): CreateTodoListsTCType => {
                     dispatch(addTodoListAC(res.data.data.item))
                     dispatch(setAppStatusAC("succeeded"))
                 } else {
-                    dispatch(setAppErrorAC(res.data.messages.length ? res.data.messages[0] : "Some server error"))
-                    dispatch(setAppStatusAC("failed"))
+                    handleServerAppError(res.data, dispatch)
                 }
             })
             .catch(err => {
-                dispatch(setAppErrorAC("Some error, maybe it depends of network"))
-                dispatch(setAppStatusAC("failed"))
+                handleServerNetworkError(err, dispatch)
             })
     }
 }
@@ -96,8 +96,15 @@ export const deleteTodoListsTC = (todolistId: string): DeleteTodoListsTCType => 
         dispatch(setAppStatusAC("loading"))
         todoListsAPI.deleteTodoList(todolistId)
             .then(res => {
-                dispatch(removeTodoListAC(todolistId))
-                dispatch(setAppStatusAC("succeeded"))
+                if (res.data.resultCode === 0) {
+                    dispatch(removeTodoListAC(todolistId))
+                    dispatch(setAppStatusAC("succeeded"))
+                } else {
+                    handleServerAppError(res.data, dispatch)
+                }
+            })
+            .catch(err => {
+                handleServerNetworkError(err, dispatch)
             })
     }
 }

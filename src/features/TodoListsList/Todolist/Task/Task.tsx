@@ -10,8 +10,9 @@ type TaskPropsType = {
     removeTask: (taskId: string, todoListId: string) => void
     changeTaskStatus: (taskId: string, status: TaskStatuses, todoListId: string) => void
     changeTaskTitle: (taskId: string, title: string, todoListId: string) => void
+    disabled?: boolean
 }
-export const Task = React.memo((props: TaskPropsType) => {
+export const Task = React.memo(({disabled, ...props}: TaskPropsType) => {
 
     const removeTask = () => {
         props.removeTask(props.task.id, props.todoListId)
@@ -30,9 +31,10 @@ export const Task = React.memo((props: TaskPropsType) => {
                 onChange={changeStatus}
                 checked={props.task.status === TaskStatuses.Completed}
                 color={"primary"}
+                disabled={disabled}
             />
-            <EditableSpan title={props.task.title} changeTitle={changeTaskTitle}/>
-            <IconButton onClick={removeTask} color={"primary"}>
+            <EditableSpan title={props.task.title} changeTitle={changeTaskTitle} disabled={disabled}/>
+            <IconButton onClick={removeTask} color={"primary"} disabled={disabled}>
                 <Delete/>
             </IconButton>
         </li>

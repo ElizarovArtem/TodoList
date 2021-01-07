@@ -65,6 +65,9 @@ export const setTodoListsTC = (): SetTodoListsTCType => {
                 dispatch(setTodoListsAC(res.data))
                 dispatch(setAppStatusAC("succeeded"))
             })
+            .catch(err => {
+                handleServerNetworkError(err, dispatch)
+            })
     }
 }
 

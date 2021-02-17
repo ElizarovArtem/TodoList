@@ -18,7 +18,7 @@ export function ErrorSnackbar() {
             return;
         }
 
-        dispatch(setAppErrorAC(null))
+        dispatch(setAppErrorAC({error: null}))
     };
 
     const error = useSelector<RootStateType, string | null>(state => state.app.error)

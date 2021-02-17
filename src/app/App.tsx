@@ -35,7 +35,7 @@ const App = React.memo(() => {
 
     if(!isInitialized) {
         return <div style={{textAlign:'center', position:'fixed', top:'50%', width:'100%'}}>
-            <CircularProgress style={{width:'200px', height: "200px"}}/>
+            <CircularProgress style={{width:'100px', height: "100px"}}/>
         </div>
     }
 

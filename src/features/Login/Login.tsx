@@ -2,7 +2,7 @@ import React from 'react'
 import {Checkbox, FormControl, FormControlLabel, FormGroup, FormLabel, TextField, Button, Grid} from '@material-ui/core'
 import {useFormik} from "formik";
 import {useDispatch, useSelector} from "react-redux";
-import {loginTC} from "./authReducer";
+import {loginTC, setIsLoggedInAC} from "./authReducer";
 import {RootStateType} from "../../app/store";
 import { Redirect } from 'react-router-dom';
 
@@ -11,8 +11,10 @@ type FormikErrorType = {
     password?: string
     rememberMe?: boolean
 }
-
-export const Login = () => {
+type LoginPropsType = {
+    demo?: boolean
+}
+export const Login = ({demo = false}: LoginPropsType) => {
 
     const dispatch = useDispatch()
     const isLoggedIn = useSelector<RootStateType, boolean>(state => state.auth.isLoggedIn)
@@ -40,8 +42,12 @@ export const Login = () => {
             return errors;
         },
         onSubmit: values => {
-            dispatch(loginTC(values))
-            formik.resetForm()
+            if(!demo) {
+                dispatch(loginTC(values))
+                formik.resetForm()
+            } else {
+                dispatch(setIsLoggedInAC({value: true}))
+            }
         }
     })
 

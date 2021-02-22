@@ -17,7 +17,10 @@ import {AddItemForm} from "../../components/AddItemForm/AddItemForm";
 import {TodoList} from "./Todolist/TodoList";
 import {Redirect} from "react-router-dom";
 
-export const TodoListsList = () => {
+type TodoListsListPropsType = {
+    demo?: boolean
+}
+export const TodoListsList = ({demo = false}: TodoListsListPropsType) => {
     let todoLists = useSelector<RootStateType, Array<TodoListDomainType>>(state => state.todoLists)
     let tasks = useSelector<RootStateType, TasksStateType>(state => state.tasks)
     const isLoggedIn = useSelector<RootStateType, boolean>(state => state.auth.isLoggedIn)
@@ -25,7 +28,7 @@ export const TodoListsList = () => {
     const dispatch = useDispatch()
 
     useEffect(() => {
-        if (!isLoggedIn) {
+        if (demo || !isLoggedIn) {
             return
         }
         dispatch(setTodoListsTC())
@@ -90,6 +93,7 @@ export const TodoListsList = () => {
                                     changeTaskTitle={changeTaskTitle}
                                     removeTodoList={removeTodoList}
                                     changeTodoListTitle={changeTodoListTitle}
+                                    demo={demo}
                                 />
                             </Paper>
                         </Grid>

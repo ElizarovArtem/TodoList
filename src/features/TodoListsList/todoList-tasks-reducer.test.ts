@@ -5,7 +5,7 @@ test('ids should be equals', () => {
     const startTasksState: TasksStateType = {};
     const startTodoListsState: Array<TodoListDomainType> = [];
 
-    const action = addTodoListAC({id: "todolistId1", title: "What to learn", order: 0, addedDate: ""});
+    const action = addTodoListAC({todolist: {id: "todolistId1", title: "What to learn", order: 0, addedDate: ""}});
 
     const endTasksState = tasksReducer(startTasksState, action)
     const endTodoListsState = todoListReducer(startTodoListsState, action)
@@ -14,7 +14,7 @@ test('ids should be equals', () => {
     const idFromTasks = keys[0];
     const idFromTodoLists = endTodoListsState[0].id;
 
-    expect(idFromTasks).toBe(action.todolist.id);
-    expect(idFromTodoLists).toBe(action.todolist.id);
+    expect(idFromTasks).toBe(action.payload.todolist.id);
+    expect(idFromTodoLists).toBe(action.payload.todolist.id);
     expect(idFromTodoLists).toEqual(idFromTasks);
 });

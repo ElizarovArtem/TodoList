@@ -18,20 +18,30 @@ import {initializedTC, RequestStatusType} from "./appReducer";
 import {ErrorSnackbar} from "../components/ErrorSnackbar/ErrorSnackbar";
 import {Route, Redirect, Switch} from 'react-router-dom';
 import {Login} from "../features/Login/Login";
-import {logoutTC} from "../features/Login/authReducer";
+import {logoutTC, setIsLoggedInAC} from "../features/Login/authReducer";
 
-
-const App = React.memo(() => {
+type AppPropsType = {
+    demo?: boolean
+}
+const App = React.memo(({demo = false}:AppPropsType) => {
     const status = useSelector<RootStateType, RequestStatusType>(state => state.app.status)
     const isLoggedIn = useSelector<RootStateType, boolean>(state => state.auth.isLoggedIn)
     const isInitialized = useSelector<RootStateType, boolean>(state => state.app.isInitialized)
     const dispatch = useDispatch()
 
     useEffect(() => {
-        dispatch(initializedTC())
+        if(!demo) {
+            dispatch(initializedTC())
+        }
     }, [])
 
-    const logoutHandler = useCallback(() => dispatch(logoutTC()), [])
+    const logoutHandler = useCallback(() => {
+        if(!demo) {
+            dispatch(logoutTC())
+        } else {
+            dispatch(setIsLoggedInAC({value: false}))
+        }
+    }, [])
 
     if(!isInitialized) {
         return <div style={{textAlign:'center', position:'fixed', top:'50%', width:'100%'}}>
@@ -55,7 +65,7 @@ const App = React.memo(() => {
             {status === "loading" && <LinearProgress color="secondary" style={{display: "absolute"}}/>}
             <Container fixed={true}>
                 <Switch>
-                    <Route exact path={'/'} render={() => <TodoListsList/>}/>
+                    <Route exact path={'/'} render={() => <TodoListsList demo={demo}/>}/>
                     <Route path={'/login'} render={() => <Login/>}/>
                     <Route path={'/404'} render={() => <h1 style={{textAlign: "center"}}>404:Page not found</h1>}/>
                     <Redirect from={'*'} to={'/404'}/>

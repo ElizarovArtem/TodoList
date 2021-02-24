@@ -10,7 +10,7 @@ import {
     TodoListDomainType,
     updateTodoListsTC
 } from "./todoList-reducer";
-import {addTaskTC, deleteTasksTC, TasksStateType, updateTaskTC} from "./tasks-reducer";
+import {addTaskTC, deleteTaskTC, TasksStateType, updateTaskTC} from "./tasks-reducer";
 import {TaskStatuses} from "../../api/api-todolist";
 import {Grid, Paper} from "@material-ui/core";
 import {AddItemForm} from "../../components/AddItemForm/AddItemForm";
@@ -35,7 +35,7 @@ export const TodoListsList = ({demo = false}: TodoListsListPropsType) => {
     }, [])
 
     const addTask = useCallback((taskTitle: string, todoListID: string) => {
-        dispatch(addTaskTC(todoListID, taskTitle))
+        dispatch(addTaskTC({todoLIstId: todoListID, title: taskTitle}))
     }, []);
 
     const changeTaskStatus = useCallback((taskId: string, status: TaskStatuses, todoListID: string) => {
@@ -47,7 +47,7 @@ export const TodoListsList = ({demo = false}: TodoListsListPropsType) => {
     }, []);
 
     const removeTasks = useCallback((taskId: string, todoListID: string) => {
-        dispatch(deleteTasksTC(todoListID, taskId))
+        dispatch(deleteTaskTC({todoLIstId: todoListID, taskId}))
     }, []);
 
     const changeFilter = useCallback((value: FilterValuesType, todoListID: string) => {

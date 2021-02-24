@@ -1,6 +1,6 @@
 import {
     addTaskAC,
-    removeTaskAC,
+    removeTaskAC, setTasksTC,
     tasksReducer,
     TasksStateType, updateTaskAC
 } from "./tasks-reducer";
@@ -125,3 +125,14 @@ test('empty array should be added when todolist is set', () => {
     expect(endState["2"]).toEqual([]);
 });
 
+test('tasks from server should be added to state', () => {
+
+    const action = setTasksTC.fulfilled({tasks: startState["todolistId1"], todoLIstId: "todolistId1"}, "args", "todolistId1")
+
+    const endState = tasksReducer({}, action)
+
+    const keys = Object.keys(endState);
+
+    expect(keys.length).toBe(1);
+    expect(endState["todolistId1"][0].title).toEqual("CSS");
+});

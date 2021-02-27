@@ -1,10 +1,10 @@
 import React from 'react'
 import {Checkbox, FormControl, FormControlLabel, FormGroup, FormLabel, TextField, Button, Grid} from '@material-ui/core'
 import {useFormik} from "formik";
-import {useDispatch, useSelector} from "react-redux";
+import {useSelector} from "react-redux";
 import {loginTC, setIsLoggedInAC} from "./authReducer";
-import {RootStateType} from "../../app/store";
-import { Redirect } from 'react-router-dom';
+import {RootStateType, useAppDispatch} from "../../app/store";
+import {Redirect} from 'react-router-dom';
 
 type FormikErrorType = {
     email?: string
@@ -16,7 +16,7 @@ type LoginPropsType = {
 }
 export const Login = ({demo = false}: LoginPropsType) => {
 
-    const dispatch = useDispatch()
+    const dispatch = useAppDispatch()
     const isLoggedIn = useSelector<RootStateType, boolean>(state => state.auth.isLoggedIn)
 
     const formik = useFormik({
@@ -29,9 +29,9 @@ export const Login = ({demo = false}: LoginPropsType) => {
             const errors: FormikErrorType = {};
             if (!values.email) {
                 errors.email = "Email is required"
-            } else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.email)) {
+            } /*else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.email)) {
                 errors.email = 'Invalid email address';
-            }
+            }*/
 
             if (!values.password) {
                 errors.password = "Password is required"
@@ -41,10 +41,18 @@ export const Login = ({demo = false}: LoginPropsType) => {
 
             return errors;
         },
-        onSubmit: values => {
-            if(!demo) {
-                dispatch(loginTC(values))
-                formik.resetForm()
+        onSubmit: async (values, formikHelpers) => {
+            if (!demo) {
+
+                const action = await dispatch(loginTC(values))
+                debugger
+                if (loginTC.rejected.match(action)) {
+                    if (action.payload && action.payload.fields?.length) {
+                        formikHelpers.setFieldError(action.payload.fields[0].field, action.payload.fields[0].error)
+                    }
+                } else {
+                    formik.resetForm()
+                }
             } else {
                 dispatch(setIsLoggedInAC({value: true}))
             }
@@ -74,7 +82,6 @@ export const Login = ({demo = false}: LoginPropsType) => {
                             label="Email"
                             margin="normal"
                             name={"email"}
-                            type={"email"}
                             onBlur={formik.handleBlur}
                             value={formik.values.email}
                             onChange={formik.handleChange}

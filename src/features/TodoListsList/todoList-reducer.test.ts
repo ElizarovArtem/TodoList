@@ -1,9 +1,8 @@
 import {
     addTodoListAC,
-    changeTodoListFilterAC,
-    changeTodoListTitleAC, FilterValuesType,
+    changeTodoListFilterAC, FilterValuesType,
     removeTodoListAC, TodoListDomainType,
-    todoListReducer
+    todoListReducer, updateTodoListsTC
 } from './todoList-reducer'
 import {v1} from 'uuid';
 
@@ -41,7 +40,7 @@ test('correct todolist should change its name', () => {
 
     let newTodolistTitle = "New Todolist";
 
-    const action = changeTodoListTitleAC({id: todolistId2,title: newTodolistTitle})
+    const action = updateTodoListsTC.fulfilled({todoListId: todolistId2,title: newTodolistTitle}, 'request', {todolistId: todolistId2,title: newTodolistTitle})
 
     const endState = todoListReducer(startState, action);
 

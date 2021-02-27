@@ -4,7 +4,6 @@ import {setAppErrorAC, SetAppErrorType, setAppStatusAC, SetAppStatusType} from "
 
 export const handleServerAppError =
     <D>(data: ResponseType<D>, dispatch: Dispatch<SetAppStatusType | SetAppErrorType>) => {
-    debugger
         if (data.messages.length) {
             dispatch(setAppErrorAC({error:  data.messages[0]}))
         } else {

@@ -1,8 +1,9 @@
 import {
-    addTaskAC,
-    removeTaskAC, setTasksTC,
+    addTaskTC,
+    deleteTaskTC,
+    setTasksTC,
     tasksReducer,
-    TasksStateType, updateTaskAC
+    TasksStateType, updateTaskTC
 } from "./tasks-reducer";
 import {addTodoListAC, removeTodoListAC, setTodoListsAC} from "./todoList-reducer";
 import {TaskStatuses, TodoListType} from "../../api/api-todolist";
@@ -39,7 +40,7 @@ beforeEach(() => {
 
 test('correct task should be deleted from correct array', () => {
 
-    const action = removeTaskAC({taskID: "2",todoListId: "todolistId2"});
+    const action = deleteTaskTC.fulfilled({taskID: "2",todoListId: "todolistId2"}, "", {taskId: "2",todoLIstId: "todolistId2"});
 
     const endState = tasksReducer(startState, action)
 
@@ -53,7 +54,7 @@ test('correct task should be added for correct array', () => {
         todoListId: 'todolistId2', addedDate: "", deadline: "",
         description: "", order: 0, priority: 0, startDate: ""}
 
-    const action = addTaskAC({task});
+    const action = addTaskTC.fulfilled({...task}, "", {title: task.title, todoLIstId: task.todoListId});
 
     const endState = tasksReducer(startState, action)
 
@@ -62,7 +63,8 @@ test('correct task should be added for correct array', () => {
 
 test('status of specified task should be changed', () => {
 
-    const action = updateTaskAC({taskID: "2",todoListID: "todolistId2",model: {status: TaskStatuses.New}});
+    let updateTaskParam = {taskID: "2",todoListID: "todolistId2",model: {status: TaskStatuses.New}};
+    const action = updateTaskTC.fulfilled(updateTaskParam, "", {taskId: "2", todoListId: "todolistId2", domainModel: {status: TaskStatuses.New}});
 
     const endState = tasksReducer(startState, action)
 
@@ -72,7 +74,8 @@ test('status of specified task should be changed', () => {
 
 test('title of specified task should be changed', () => {
 
-    const action = updateTaskAC({taskID: "2", todoListID: "todolistId2", model: {title: "Bubble"}});
+    let updateTaskParam = {taskID: "2",todoListID: "todolistId2",model: {title: "Bubble"}};
+    const action = updateTaskTC.fulfilled(updateTaskParam, "", {taskId: "2", todoListId: "todolistId2", domainModel: {title: "Bubble"}});
 
     const endState = tasksReducer(startState, action)
 

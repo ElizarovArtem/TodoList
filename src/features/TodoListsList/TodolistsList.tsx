@@ -38,12 +38,12 @@ export const TodoListsList = ({demo = false}: TodoListsListPropsType) => {
         dispatch(addTaskTC({todoLIstId: todoListID, title: taskTitle}))
     }, []);
 
-    const changeTaskStatus = useCallback((taskId: string, status: TaskStatuses, todoListID: string) => {
-        dispatch(updateTaskTC(todoListID, taskId, {status}))
+    const changeTaskStatus = useCallback((taskId: string, status: TaskStatuses, todoListId: string) => {
+        dispatch(updateTaskTC({todoListId, taskId, domainModel: {status}}))
     }, []);
 
-    const changeTaskTitle = useCallback((taskId: string, title: string, todoListID: string) => {
-        dispatch(updateTaskTC(todoListID, taskId, {title}))
+    const changeTaskTitle = useCallback((taskId: string, title: string, todoListId: string) => {
+        dispatch(updateTaskTC({todoListId, taskId, domainModel: {title}} ))
     }, []);
 
     const removeTasks = useCallback((taskId: string, todoListID: string) => {
@@ -63,8 +63,8 @@ export const TodoListsList = ({demo = false}: TodoListsListPropsType) => {
         dispatch(action)
     }, [])
 
-    const changeTodoListTitle = useCallback((todoListID: string, title: string) => {
-        dispatch(updateTodoListsTC(todoListID, title))
+    const changeTodoListTitle = useCallback((todolistId: string, title: string) => {
+        dispatch(updateTodoListsTC({todolistId,title}))
     }, [])
 
     if (!isLoggedIn) {

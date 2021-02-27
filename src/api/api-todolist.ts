@@ -98,6 +98,7 @@ export enum TaskPriorities {
 export type ResponseType<D = {}> = {
     data: D
     resultCode: number
+    fieldsErrors: Array<{field: string, error: string}>
     messages: string[]
 }
 type GetTasksResponseType = {

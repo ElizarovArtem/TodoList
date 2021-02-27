@@ -8,7 +8,7 @@ import {TaskDomainType} from "../../tasks-reducer";
 export type TaskPropsType = {
     task: TaskDomainType
     todoListId: string
-    removeTask: (taskId: string, todoListId: string) => void
+    removeTask: (param: { taskId: string, todoLIstId: string }) => void
     changeTaskStatus: (taskId: string, status: TaskStatuses, todoListId: string) => void
     changeTaskTitle: (taskId: string, title: string, todoListId: string) => void
     disabled?: boolean
@@ -16,7 +16,7 @@ export type TaskPropsType = {
 export const Task = React.memo(({disabled, ...props}: TaskPropsType) => {
 
     const removeTask = () => {
-        props.removeTask(props.task.id, props.todoListId)
+        props.removeTask({taskId: props.task.id, todoLIstId: props.todoListId})
     };
     const changeStatus = useCallback( (e: ChangeEvent<HTMLInputElement>) => {
         const status = e.currentTarget.checked ? TaskStatuses.Completed : TaskStatuses.New

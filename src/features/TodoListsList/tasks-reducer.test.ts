@@ -1,12 +1,10 @@
 import {
-    addTaskTC,
-    deleteTaskTC,
-    setTasksTC,
     tasksReducer,
-    TasksStateType, updateTaskTC
+    TasksStateType
 } from "./tasks-reducer";
 import {addTodoListAC, removeTodoListAC, setTodoListsAC} from "./todoList-reducer";
 import {TaskStatuses, TodoListType} from "../../api/api-todolist";
+import {addTaskTC, deleteTaskTC, setTasksTC, updateTaskTC} from "./tasks-actions";
 
 let startState: TasksStateType = {};
 

@@ -11,22 +11,24 @@ import {
     Typography
 } from "@material-ui/core";
 import {Menu} from "@material-ui/icons";
-import {TodoListsList} from "../features/TodoListsList/TodolistsList";
+import {TodoListsList} from "../features/TodoListsList";
 import {useDispatch, useSelector} from "react-redux";
-import {RootStateType} from "./store";
-import {initializedTC, RequestStatusType} from "./appReducer";
+import {initializedTC} from "./appReducer";
 import {ErrorSnackbar} from "../components/ErrorSnackbar/ErrorSnackbar";
-import {Route, Redirect, Switch} from 'react-router-dom';
+import {Redirect, Route, Switch} from 'react-router-dom';
 import {Login} from "../features/Login/Login";
 import {logoutTC, setIsLoggedInAC} from "../features/Login/authReducer";
+import {selectIsInitialized, selectStatus} from "./selectors";
+import {authSelectors} from "../features/Login";
 
 type AppPropsType = {
     demo?: boolean
 }
 const App = React.memo(({demo = false}:AppPropsType) => {
-    const status = useSelector<RootStateType, RequestStatusType>(state => state.app.status)
-    const isLoggedIn = useSelector<RootStateType, boolean>(state => state.auth.isLoggedIn)
-    const isInitialized = useSelector<RootStateType, boolean>(state => state.app.isInitialized)
+
+    const status = useSelector(selectStatus)
+    const isLoggedIn = useSelector(authSelectors.selectIsLoggedIn)
+    const isInitialized = useSelector(selectIsInitialized)
     const dispatch = useDispatch()
 
     useEffect(() => {

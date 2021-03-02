@@ -7,9 +7,9 @@ import {Task} from "./Task/Task";
 import {TaskStatuses, TaskType} from "../../../api/api-todolist";
 import {FilterValuesType, TodoListDomainType} from "../todoList-reducer";
 import {AsyncTaskActions, TaskDomainType} from "../tasks-reducer";
-import {useActions, useAppDispatch} from "../../../app/store";
 import {todoListActions} from "../index";
-import {Action, AsyncThunkAction} from "@reduxjs/toolkit";
+import {AsyncThunkAction} from "@reduxjs/toolkit";
+import {useActions} from "../../../utils/redux-utils";
 
 
 type PropsType = {

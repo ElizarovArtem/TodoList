@@ -1,23 +1,11 @@
-import {
-    FieldsErrorsResponseType,
-    TaskPriorities,
-    TaskStatuses,
-    TaskType,
-    todoListsAPI,
-    UpdateTaskModelType
-} from "../../api/api-todolist";
-import {RequestStatusType, setAppStatusAC} from "../../app/appReducer";
+import {TaskPriorities, TaskStatuses, TaskType, todoListsAPI, UpdateTaskModelType} from "../../api/api-todolist";
+import {RequestStatusType, setAppStatusAC} from "../Application/applicationReducer";
 import {createAsyncThunk, createSlice, PayloadAction} from "@reduxjs/toolkit";
-import {
-    handleServerAppError,
-    handleServerAppErrorSecond,
-    handleServerNetworkError,
-    handleServerNetworkErrorSecond
-} from "../../utils/error-utils";
-import {AsyncActionsRejectedValueType, RootStateType} from "../../app/store";
+import {handleServerAppErrorSecond, handleServerNetworkErrorSecond} from "../../utils/error-utils";
 import {AsyncTodoListActions} from "./todoList-reducer"
+import {AsyncActionsRejectedValueType, RootStateType} from "../../utils/types";
 
-console.log('TASK-REDUCER')
+
 let initialState: TasksStateType = {}
 
 export const setTasksTC = createAsyncThunk<
@@ -34,7 +22,9 @@ export const setTasksTC = createAsyncThunk<
         return handleServerNetworkErrorSecond(err, thunkAPI)
     }
 })
-export const deleteTaskTC = createAsyncThunk('tasks/deleteTask', async (params: { todoLIstId: string, taskId: string }, thunkAPI) => {
+export const deleteTaskTC = createAsyncThunk<
+    {taskID: string, todoListId: string}, { todoLIstId: string, taskId: string }, AsyncActionsRejectedValueType
+    >('tasks/deleteTask', async (params: { todoLIstId: string, taskId: string }, thunkAPI) => {
     thunkAPI.dispatch(setAppStatusAC({status: "loading"}))
     thunkAPI.dispatch(setTaskEntityStatusAC({taskId: params.taskId, status: "loading", todoLIstId: params.todoLIstId}))
     try {
@@ -129,7 +119,7 @@ export const AsyncTaskActions = {
     updateTaskTC
 }
 
-const slice = createSlice({
+export const slice = createSlice({
     name: "tasks",
     initialState: initialState,
     reducers: {

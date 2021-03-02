@@ -1,14 +1,15 @@
 import React, {useEffect} from "react";
 import {useSelector} from "react-redux";
-import {RootStateType, useActions, useAppDispatch} from "../../app/store";
 import {TodoListDomainType,} from "./todoList-reducer";
 import {TasksStateType} from "./tasks-reducer";
 import {Grid} from "@material-ui/core";
-import {AddItemForm} from "../../components/AddItemForm/AddItemForm";
-import {TodoList} from "./Todolist/TodoList";
+import {AddItemForm} from "../../components";
+import {TodoList} from "./";
 import {Redirect} from "react-router-dom";
 import {authSelectors} from "../Login";
 import {todoListActions} from "./index";
+import {useActions, useAppDispatch} from "../../utils/redux-utils";
+import {RootStateType} from "../../utils/types";
 
 type TodoListsListPropsType = {
     demo?: boolean

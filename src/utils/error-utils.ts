@@ -1,26 +1,14 @@
-import {ResponseType} from "../api/api-todolist"
-import {Dispatch} from "redux";
-import {setAppErrorAC, SetAppErrorType, setAppStatusAC, SetAppStatusType} from "../app/appReducer";
+import {ResponseType} from "../api/api-todolist";
+import {setAppErrorAC, setAppStatusAC} from "../features/Application/applicationReducer";
 import {AxiosError} from "axios";
 
-export const handleServerAppError =
-    <D>(data: ResponseType<D>, dispatch: Dispatch<SetAppStatusType | SetAppErrorType>, showError: boolean = true) => {
-        if (showError) {
-            dispatch(setAppErrorAC({error: data.messages.length ? data.messages[0] : "Some error occurred"}))
-        }
-        dispatch(setAppStatusAC({status: "failed"}))
-    }
-
-export const handleServerNetworkError =
-    (err: { message: string }, dispatch: Dispatch<SetAppStatusType | SetAppErrorType>, showError: boolean = true) => {
-        if (showError) {
-            dispatch(setAppErrorAC({error: err.message}))
-        }
-        dispatch(setAppStatusAC({status: "failed"}))
-    }
+type ThunkAPIType = {
+    dispatch: (action: any) => any
+    rejectWithValue: Function
+}
 
 export const handleServerAppErrorSecond =
-    <D>(data: ResponseType<D>, thunkAPI: any, showError: boolean = true) => {
+    <D>(data: ResponseType<D>, thunkAPI: ThunkAPIType, showError: boolean = true) => {
         if (showError) {
             thunkAPI.dispatch(setAppErrorAC({error: data.messages.length ? data.messages[0] : "Some error occurred"}))
         }
@@ -29,7 +17,7 @@ export const handleServerAppErrorSecond =
     }
 
 export const handleServerNetworkErrorSecond =
-    (err: AxiosError, thunkAPI: any, showError: boolean = true) => {
+    (err: AxiosError, thunkAPI: ThunkAPIType, showError: boolean = true) => {
         if (showError) {
             thunkAPI.dispatch(setAppErrorAC({error: err.message}))
         }

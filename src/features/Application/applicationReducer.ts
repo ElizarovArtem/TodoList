@@ -1,8 +1,7 @@
-import {Dispatch} from "redux";
-import {authAPI} from "../api/api-todolist";
-import {setIsLoggedInAC} from "../features/Login/authReducer";
+import {authAPI} from "../../api/api-todolist";
 import {createAsyncThunk, createSlice, PayloadAction} from "@reduxjs/toolkit";
-import {handleServerNetworkError} from "../utils/error-utils";
+import {handleServerNetworkErrorSecond} from "../../utils/error-utils";
+import {appCommonActions} from "../CommonActions/App";
 
 const initialState: InitialStateType = {
     status: 'idle',
@@ -14,12 +13,11 @@ export const initializedTC = createAsyncThunk("app/initialized", async (arg, thu
     const res = await authAPI.me()
     try {
         if (res.data.resultCode === 0) {
-            thunkAPI.dispatch(setIsLoggedInAC({value: true}))
+            thunkAPI.dispatch(appCommonActions.setIsLoggedInAC({value: true}))
         }
         return {isInitialized: true}
     } catch (err) {
-        handleServerNetworkError(err, thunkAPI.dispatch)
-        return thunkAPI.rejectWithValue(err.message)
+        return handleServerNetworkErrorSecond(err, thunkAPI)
     }
 })
 
@@ -45,13 +43,11 @@ export const slice = createSlice({
     }
 })
 
-export const appReducer = slice.reducer
+export const applicationReducer = slice.reducer
 
 export const {setAppStatusAC, setAppErrorAC} = slice.actions
 
 // types
-export type SetAppStatusType = ReturnType<typeof setAppStatusAC>
-export type SetAppErrorType = ReturnType<typeof setAppErrorAC>
 export type RequestStatusType = 'idle' | 'loading' | 'succeeded' | 'failed'
 type InitialStateType = {
     status: RequestStatusType

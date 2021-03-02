@@ -32,6 +32,5 @@ export const EditableSpan = React.memo( ({disabled = false, ...props}: EditableS
             onChange={onChangeTitle}
         />
         :
-       <span onDoubleClick={() => !disabled && onEditMode()}>{props.title}</span>
-
+       <span onDoubleClick={() => !disabled && onEditMode()} style={{display: "inline-block", width: "70%"}}>{props.title}</span>
 } )

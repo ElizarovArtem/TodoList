@@ -3,8 +3,10 @@ import {Checkbox, FormControl, FormControlLabel, FormGroup, FormLabel, TextField
 import {useFormik} from "formik";
 import {useSelector} from "react-redux";
 import {authActions} from "./";
-import {RootStateType, useAppDispatch} from "../../app/store";
 import {Redirect} from 'react-router-dom';
+import {useAppDispatch} from "../../utils/redux-utils";
+import {RootStateType} from "../../utils/types";
+import {appCommonActions} from "../CommonActions/App";
 
 type FormikErrorType = {
     email?: string
@@ -54,7 +56,7 @@ export const Login = ({demo = false}: LoginPropsType) => {
                     formik.resetForm()
                 }
             } else {
-                dispatch(authActions.setIsLoggedInAC({value: true}))
+                dispatch(appCommonActions.setIsLoggedInAC({value: true}))
             }
         }
     })
@@ -74,8 +76,8 @@ export const Login = ({demo = false}: LoginPropsType) => {
                             </a>
                         </p>
                         <p>or use common test account credentials:</p>
-                        <p>Email: free@samuraijs.com</p>
-                        <p>Password: free</p>
+                        <p>Email: p0chta.testovaya@yandex.ru</p>
+                        <p>Password: qwerty123</p>
                     </FormLabel>
                     <FormGroup>
                         <TextField

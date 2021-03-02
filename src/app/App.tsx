@@ -13,13 +13,14 @@ import {
 import {Menu} from "@material-ui/icons";
 import {TodoListsList} from "../features/TodoListsList";
 import {useDispatch, useSelector} from "react-redux";
-import {appActions} from "./";
-import {ErrorSnackbar} from "../components/ErrorSnackbar/ErrorSnackbar";
+import {appActions} from "../features/Application";
+import {ErrorSnackbar} from "../components";
 import {Redirect, Route, Switch} from 'react-router-dom';
 import {Login} from "../features/Login";
-import {logoutTC, setIsLoggedInAC} from "../features/Login/authReducer";
-import {selectIsInitialized, selectStatus} from "./selectors";
+import {authActions} from "../features/Login/";
+import {selectIsInitialized, selectStatus} from "../features/Application/selectors";
 import {authSelectors} from "../features/Login";
+import {appCommonActions} from "../features/CommonActions/App";
 
 type AppPropsType = {
     demo?: boolean
@@ -39,9 +40,9 @@ const App = React.memo(({demo = false}:AppPropsType) => {
 
     const logoutHandler = useCallback(() => {
         if(!demo) {
-            dispatch(logoutTC())
+            dispatch(authActions.logoutTC())
         } else {
-            dispatch(setIsLoggedInAC({value: false}))
+            dispatch(appCommonActions.setIsLoggedInAC({value: false}))
         }
     }, [])
 

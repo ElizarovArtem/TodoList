@@ -1,9 +1,11 @@
 import {todoListsAPI, TodoListType} from "../../api/api-todolist";
-import {RequestStatusType, setAppStatusAC} from "../Application/applicationReducer";
+import {RequestStatusType} from "../Application/applicationReducer";
 import {handleServerAppErrorSecond, handleServerNetworkErrorSecond} from "../../utils/error-utils";
 import {createAsyncThunk, createSlice, PayloadAction} from "@reduxjs/toolkit";
 import {AsyncActionsRejectedValueType} from "../../utils/types";
+import {appActions} from "../Application"
 
+const {setAppStatusAC} = appActions;
 
 let initialState: Array<TodoListDomainType> = []
 

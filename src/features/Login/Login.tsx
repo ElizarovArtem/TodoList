@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {useEffect} from 'react'
 import {Checkbox, FormControl, FormControlLabel, FormGroup, FormLabel, TextField, Button, Grid} from '@material-ui/core'
 import {useFormik} from "formik";
 import {useSelector} from "react-redux";
@@ -52,8 +52,6 @@ export const Login = ({demo = false}: LoginPropsType) => {
                     if (action.payload && action.payload.fields?.length) {
                         formikHelpers.setFieldError(action.payload.fields[0].field, action.payload.fields[0].error)
                     }
-                } else {
-                    formik.resetForm()
                 }
             } else {
                 dispatch(appCommonActions.setIsLoggedInAC({value: true}))

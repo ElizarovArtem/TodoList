@@ -1,12 +1,11 @@
-import {setAppStatusAC} from '../Application/applicationReducer'
 import {authAPI, RequestLoginType} from "../../api/api-todolist";
-import {
-    handleServerAppErrorSecond,
-    handleServerNetworkErrorSecond
-} from "../../utils/error-utils";
-import {createAsyncThunk, createSlice, PayloadAction} from "@reduxjs/toolkit";
+import {handleServerAppErrorSecond, handleServerNetworkErrorSecond} from "../../utils/error-utils";
+import {createAsyncThunk, createSlice} from "@reduxjs/toolkit";
 import {AsyncActionsRejectedValueType} from "../../utils/types";
 import {appCommonActions} from "../CommonActions/App";
+import {appActions} from "../Application"
+
+const {setAppStatusAC} = appActions;
 
 export const loginTC = createAsyncThunk<
     void,

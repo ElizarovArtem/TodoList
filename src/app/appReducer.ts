@@ -23,7 +23,11 @@ export const initializedTC = createAsyncThunk("app/initialized", async (arg, thu
     }
 })
 
-const slice = createSlice({
+export const AsyncAppActions = {
+    initializedTC
+}
+
+export const slice = createSlice({
     name: "app",
     initialState: initialState,
     reducers: {

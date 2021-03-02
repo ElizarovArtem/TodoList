@@ -1,4 +1,4 @@
-import {ActionCreatorsMapObject, applyMiddleware, bindActionCreators, combineReducers, createStore} from "redux";
+import {ActionCreatorsMapObject, bindActionCreators, combineReducers} from "redux";
 import {todoListReducer} from "../features/TodoListsList/todoList-reducer";
 import {tasksReducer} from "../features/TodoListsList/tasks-reducer";
 import thunkMiddleware from "redux-thunk"
@@ -7,6 +7,7 @@ import {authReducer} from "../features/Login/authReducer";
 import {configureStore} from "@reduxjs/toolkit";
 import {useDispatch} from "react-redux";
 import {useMemo} from "react";
+import {FieldsErrorsResponseType} from "../api/api-todolist";
 
 const rootReducer = combineReducers({
     todoLists: todoListReducer,
@@ -35,6 +36,8 @@ export function useActions<T extends ActionCreatorsMapObject>(actions: T) {
 
     return boundActions
 }
+
+export type AsyncActionsRejectedValueType = {rejectValue: {errors: Array<string>, fields?: Array<FieldsErrorsResponseType>}}
 
 // @ts-ignore
 window.store = store

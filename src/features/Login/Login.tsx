@@ -2,7 +2,7 @@ import React from 'react'
 import {Checkbox, FormControl, FormControlLabel, FormGroup, FormLabel, TextField, Button, Grid} from '@material-ui/core'
 import {useFormik} from "formik";
 import {useSelector} from "react-redux";
-import {loginTC, setIsLoggedInAC} from "./authReducer";
+import {authActions} from "./";
 import {RootStateType, useAppDispatch} from "../../app/store";
 import {Redirect} from 'react-router-dom';
 
@@ -44,9 +44,9 @@ export const Login = ({demo = false}: LoginPropsType) => {
         onSubmit: async (values, formikHelpers) => {
             if (!demo) {
 
-                const action = await dispatch(loginTC(values))
-                debugger
-                if (loginTC.rejected.match(action)) {
+                const action = await dispatch(authActions.loginTC(values))
+
+                if (authActions.loginTC.rejected.match(action)) {
                     if (action.payload && action.payload.fields?.length) {
                         formikHelpers.setFieldError(action.payload.fields[0].field, action.payload.fields[0].error)
                     }
@@ -54,7 +54,7 @@ export const Login = ({demo = false}: LoginPropsType) => {
                     formik.resetForm()
                 }
             } else {
-                dispatch(setIsLoggedInAC({value: true}))
+                dispatch(authActions.setIsLoggedInAC({value: true}))
             }
         }
     })

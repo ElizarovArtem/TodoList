@@ -13,10 +13,10 @@ import {
 import {Menu} from "@material-ui/icons";
 import {TodoListsList} from "../features/TodoListsList";
 import {useDispatch, useSelector} from "react-redux";
-import {initializedTC} from "./appReducer";
+import {appActions} from "./";
 import {ErrorSnackbar} from "../components/ErrorSnackbar/ErrorSnackbar";
 import {Redirect, Route, Switch} from 'react-router-dom';
-import {Login} from "../features/Login/Login";
+import {Login} from "../features/Login";
 import {logoutTC, setIsLoggedInAC} from "../features/Login/authReducer";
 import {selectIsInitialized, selectStatus} from "./selectors";
 import {authSelectors} from "../features/Login";
@@ -33,7 +33,7 @@ const App = React.memo(({demo = false}:AppPropsType) => {
 
     useEffect(() => {
         if(!demo) {
-            dispatch(initializedTC())
+            dispatch(appActions.initializedTC())
         }
     }, [])
 

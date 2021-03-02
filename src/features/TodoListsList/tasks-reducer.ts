@@ -1,22 +1,37 @@
-import {TaskPriorities, TaskStatuses, TaskType, todoListsAPI, UpdateTaskModelType} from "../../api/api-todolist";
+import {
+    FieldsErrorsResponseType,
+    TaskPriorities,
+    TaskStatuses,
+    TaskType,
+    todoListsAPI,
+    UpdateTaskModelType
+} from "../../api/api-todolist";
 import {RequestStatusType, setAppStatusAC} from "../../app/appReducer";
 import {createAsyncThunk, createSlice, PayloadAction} from "@reduxjs/toolkit";
-import {handleServerAppError, handleServerNetworkError} from "../../utils/error-utils";
-import {RootStateType} from "../../app/store";
+import {
+    handleServerAppError,
+    handleServerAppErrorSecond,
+    handleServerNetworkError,
+    handleServerNetworkErrorSecond
+} from "../../utils/error-utils";
+import {AsyncActionsRejectedValueType, RootStateType} from "../../app/store";
 import {AsyncTodoListActions} from "./todoList-reducer"
 
 console.log('TASK-REDUCER')
 let initialState: TasksStateType = {}
 
-export const setTasksTC = createAsyncThunk('tasks/setTasks', async (todoLIstId: string, thunkAPI) => {
+export const setTasksTC = createAsyncThunk<
+    {tasks: Array<TaskType>, todoLIstId: string},
+    string,
+    AsyncActionsRejectedValueType
+    >('tasks/setTasks', async (todoLIstId, thunkAPI) => {
     thunkAPI.dispatch(setAppStatusAC({status: "loading"}))
     try {
         let res = await todoListsAPI.getTasks(todoLIstId)
         thunkAPI.dispatch(setAppStatusAC({status: "succeeded"}))
         return {tasks: res.data.items, todoLIstId: todoLIstId}
     } catch (err) {
-        handleServerNetworkError(err, thunkAPI.dispatch)
-        return thunkAPI.rejectWithValue(err.message)
+        return handleServerNetworkErrorSecond(err, thunkAPI)
     }
 })
 export const deleteTaskTC = createAsyncThunk('tasks/deleteTask', async (params: { todoLIstId: string, taskId: string }, thunkAPI) => {
@@ -28,20 +43,22 @@ export const deleteTaskTC = createAsyncThunk('tasks/deleteTask', async (params: 
             thunkAPI.dispatch(setAppStatusAC({status: "succeeded"}))
             return {taskID: params.taskId, todoListId: params.todoLIstId}
         } else {
-            handleServerAppError(res.data, thunkAPI.dispatch)
             thunkAPI.dispatch(setTaskEntityStatusAC({
                 taskId: params.taskId,
                 status: "failed",
                 todoLIstId: params.todoLIstId
             }))
-            return thunkAPI.rejectWithValue(res.data.messages[0])
+            return handleServerAppErrorSecond(res.data, thunkAPI)
         }
     } catch (err) {
-        handleServerNetworkError(err, thunkAPI.dispatch)
-        return thunkAPI.rejectWithValue(err.message)
+        return handleServerNetworkErrorSecond(err, thunkAPI)
     }
 })
-export const addTaskTC = createAsyncThunk('tasks/addTask', async (param: { todoLIstId: string, title: string }, thunkAPI) => {
+export const addTaskTC = createAsyncThunk<
+    TaskType,
+    { todoLIstId: string, title: string },
+    AsyncActionsRejectedValueType
+    >('tasks/addTask', async (param: { todoLIstId: string, title: string }, thunkAPI) => {
     thunkAPI.dispatch(setAppStatusAC({status: "loading"}))
     try {
         let res = await todoListsAPI.createTask(param.todoLIstId, param.title)
@@ -49,17 +66,15 @@ export const addTaskTC = createAsyncThunk('tasks/addTask', async (param: { todoL
             thunkAPI.dispatch(setAppStatusAC({status: "succeeded"}))
             return res.data.data.item
         } else {
-            handleServerAppError(res.data, thunkAPI.dispatch)
-            return thunkAPI.rejectWithValue(res.data.messages[0])
+            return handleServerAppErrorSecond(res.data, thunkAPI)
         }
     } catch (err) {
-        handleServerNetworkError(err, thunkAPI.dispatch)
-        return thunkAPI.rejectWithValue(err.message)
+        return handleServerNetworkErrorSecond(err, thunkAPI)
     }
 })
 export const updateTaskTC = createAsyncThunk<{ taskID: string, model: UpdateDomainTaskModelType, todoListID: string },
     { todoListId: string, taskId: string, domainModel: UpdateDomainTaskModelType },
-    { state: RootStateType }>('tasks/updateTask', async (param, thunkAPI) => {
+    { state: RootStateType}>('tasks/updateTask', async (param, thunkAPI) => {
     const state = thunkAPI.getState()
 
     const task = state.tasks[param.todoListId].find((tl) => tl.id === param.taskId)
@@ -83,31 +98,24 @@ export const updateTaskTC = createAsyncThunk<{ taskID: string, model: UpdateDoma
 
         try {
             let res = await todoListsAPI.updateTask(param.todoListId, param.taskId, apiModel)
-            if (res.data.resultCode === 0) {
-                thunkAPI.dispatch(setAppStatusAC({status: "succeeded"}))
-                thunkAPI.dispatch(setTaskEntityStatusAC({
-                    taskId: param.taskId,
-                    status: "idle",
-                    todoLIstId: param.todoListId
-                }))
-                return {taskID: param.taskId, model: param.domainModel, todoListID: param.todoListId}
-            } else {
-                handleServerAppError(res.data, thunkAPI.dispatch)
-                thunkAPI.dispatch(setTaskEntityStatusAC({
-                    taskId: param.taskId,
-                    status: "idle",
-                    todoLIstId: param.todoListId
-                }))
-                return thunkAPI.rejectWithValue(res.data.messages[0])
-            }
-        } catch (err) {
-            handleServerNetworkError(err, thunkAPI.dispatch)
             thunkAPI.dispatch(setTaskEntityStatusAC({
                 taskId: param.taskId,
                 status: "idle",
                 todoLIstId: param.todoListId
             }))
-            return thunkAPI.rejectWithValue(err.message)
+            if (res.data.resultCode === 0) {
+                thunkAPI.dispatch(setAppStatusAC({status: "succeeded"}))
+                return {taskID: param.taskId, model: param.domainModel, todoListID: param.todoListId}
+            } else {
+                return handleServerAppErrorSecond(res.data, thunkAPI)
+            }
+        } catch (err) {
+            thunkAPI.dispatch(setTaskEntityStatusAC({
+                taskId: param.taskId,
+                status: "idle",
+                todoLIstId: param.todoListId
+            }))
+            return handleServerNetworkErrorSecond(err, thunkAPI)
         }
     } else {
         return thunkAPI.rejectWithValue("rejected")

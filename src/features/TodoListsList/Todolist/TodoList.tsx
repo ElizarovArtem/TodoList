@@ -1,6 +1,6 @@
 import React, {useCallback, useEffect} from 'react';
-import {AddItemForm} from "../../../components/AddItemForm/AddItemForm";
-import {EditableSpan} from "../../../components/EditableSpan/EditableSpan";
+import {AddItemForm} from "../../../components";
+import {EditableSpan} from "../../../components";
 import {Button, IconButton, Paper, PropTypes} from "@material-ui/core";
 import {Delete} from "@material-ui/icons";
 import {Task} from "./Task/Task";
@@ -24,7 +24,6 @@ export const TodoList = React.memo((props: PropsType) => {
     const {setTasksTC, addTaskTC} = useActions(AsyncTaskActions)
     const {changeTodoListFilterAC, deleteTodoListsTC, updateTodoListsTC} = useActions(todoListActions)
 
-
     const addTask = useCallback(async (title: string) => {
             let result = await addTaskTC({title, todoLIstId: props.todolist.id}) as
                 AsyncThunkAction<
@@ -46,7 +45,9 @@ export const TodoList = React.memo((props: PropsType) => {
         if (props.demo) {
             return
         }
-        setTasksTC(props.todolist.id)
+        if (!props.tasks.length) {
+            setTasksTC(props.todolist.id)
+        }
     }, [])
 
     const removeTodoList = useCallback(() => {

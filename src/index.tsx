@@ -7,13 +7,23 @@ import {Provider} from "react-redux";
 import {store} from "./app/store";
 import {BrowserRouter} from "react-router-dom";
 
-ReactDOM.render(
-    <BrowserRouter>
-        <Provider store={store}>
-            <App/>
-        </Provider>
-    </BrowserRouter>
-    , document.getElementById('root'));
+export const rerenderEntireThree = () => {
+    ReactDOM.render(
+        <BrowserRouter>
+            <Provider store={store}>
+                <App/>
+            </Provider>
+        </BrowserRouter>
+        , document.getElementById('root'));
+}
+rerenderEntireThree()
+
+
+if (process.env.NODE_ENV !== 'production' && module.hot) {
+    module.hot.accept('./app/App', () => {
+        rerenderEntireThree()
+    } )
+}
 
 // https://git.heroku.com/infinite-woodland-84760.git
 

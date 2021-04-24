@@ -1,27 +1,27 @@
-import {ActionCreatorsMapObject, bindActionCreators, combineReducers} from "redux";
-import {todoListReducer} from "../features/TodoListsList/todoList-reducer";
-import {tasksReducer} from "../features/TodoListsList/tasks-reducer";
+import {compose} from "redux";
 import thunkMiddleware from "redux-thunk"
-import {applicationReducer} from "../features/Application/applicationReducer";
-import {authReducer} from "../features/Login/authReducer";
 import {configureStore} from "@reduxjs/toolkit";
-import {useDispatch} from "react-redux";
-import {useMemo} from "react";
-import {FieldsErrorsResponseType} from "../api/api-todolist";
+import {rootReducer} from "./rootReducer";
+import {rerenderEntireThree} from "../index";
 
-const rootReducer = combineReducers({
-    todoLists: todoListReducer,
-    tasks: tasksReducer,
-    app: applicationReducer,
-    auth: authReducer
-})
-
-//export const store = createStore(rootReducer, applyMiddleware(thunkMiddleware))
+const composeEnhancers =
+    typeof window === 'object' &&
+    (window as any).__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ ?
+        (window as any).__REDUX_DEVTOOLS_EXTENSION_COMPOSE__({
+            // Specify extension’s options like name, actionsBlacklist, actionsCreators, serialize...
+        }) : compose;
 
 export const store = configureStore({
     reducer: rootReducer,
-    middleware: getDefaultMiddleware => getDefaultMiddleware().prepend(thunkMiddleware)
+    middleware: getDefaultMiddleware => getDefaultMiddleware().prepend(thunkMiddleware),
+    devTools: composeEnhancers
 })
 
 // @ts-ignore
 window.store = store
+
+if (process.env.NODE_ENV !== 'production' && module.hot) {
+    module.hot.accept('./rootReducer', () => {
+        store.replaceReducer(rootReducer)
+    } )
+}

@@ -8,7 +8,7 @@ import {appActions} from "../Application"
 const {setAppStatusAC} = appActions;
 
 let initialState: Array<TodoListDomainType> = []
-
+console.log('REDUCER$#$#$#$#$#')
 export const setTodoListsTC = createAsyncThunk<TodoListType[], void, AsyncActionsRejectedValueType>("todoList/setTodoLists", async (arg, thunkAPI) => {
     thunkAPI.dispatch(setAppStatusAC({status: "loading"}))
     try {

@@ -43,6 +43,12 @@ export const deleteTaskTC = createAsyncThunk<
             return handleServerAppErrorSecond(res.data, thunkAPI)
         }
     } catch (err) {
+        const task = thunkAPI.getState().tasks[params.todoLIstId].find(t => t.id === params.taskId)
+        task && thunkAPI.dispatch(setTaskEntityStatusAC({
+            taskId: task.id,
+            status: "idle",
+            todoLIstId: task.todoListId
+        }))
         return handleServerNetworkErrorSecond(err, thunkAPI)
     }
 })
@@ -120,7 +126,7 @@ export const AsyncTaskActions = {
     addTaskTC,
     updateTaskTC
 }
-
+console.log('TASKSREDsadasdasd1')
 export const slice = createSlice({
     name: "tasks",
     initialState: initialState,

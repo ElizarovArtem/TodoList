@@ -33,7 +33,7 @@ const App = React.memo(({demo = false}:AppPropsType) => {
     const dispatch = useDispatch()
 
     useEffect(() => {
-        if(!demo) {
+        if(!isInitialized) {
             dispatch(appActions.initializedTC())
         }
     }, [])

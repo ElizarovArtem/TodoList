@@ -21,7 +21,7 @@ export const TodoListsList = ({demo = false}: TodoListsListPropsType) => {
     const dispatch = useAppDispatch()
 
     const {setTodoListsTC} = useActions(todoListActions)
-
+    console.log('cxxc111')
     const addTodolist = async (title: string) => {
         const result = await dispatch(todoListActions.createTodoListsTC(title))
         if (todoListActions.createTodoListsTC.rejected.match(result)) {
@@ -49,7 +49,9 @@ export const TodoListsList = ({demo = false}: TodoListsListPropsType) => {
         if (demo || !isLoggedIn) {
             return
         }
-        setTodoListsTC()
+        if (!todoLists.length) {
+            setTodoListsTC()
+        }
     }, [])
 
     if (!isLoggedIn) {
